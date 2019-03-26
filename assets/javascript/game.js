@@ -62,12 +62,6 @@ var wordGuessGame = {
     lettersGuessedText: document.getElementById("letters-guessed"),
     hiddenWordText:     document.getElementById("hidden-word"),
 
-    // Possible bank of words for gameplay
-    // wordBank:           ["sasquatch", "nessie", "chupacabra",
-    //                     "bigfoot", "loch ness", "unicorn",
-    //                     "aliens", "bat boy", "poltergeist",
-    //                     "the jersey devil", "yeti"],
-
     // Init method to begin game logic
     init: function() {
         // Initialize splash screen, spacebar to begin game...
@@ -93,27 +87,34 @@ var wordGuessGame = {
         this.wordSelection = wordBank[Math.floor((Math.random() * wordBank.length))];
         this.hiddenWordArray = wordGuessGame.wordSelection.split("");
         
+        console.log("Hidden word selection is: " + wordGuessGame.wordSelection);
+        
         // Regular expression for letter selection to replace with underscores
         var regex = /[a-z]/;
 
-        // Loop to iterate to replace hidden letters with underscores
+        // FOR loop to iterate to replace hidden letters with underscores
         for(var i=0; i < wordGuessGame.hiddenWordArray.length; i++) {
             wordGuessGame.hiddenWordArray[i] = wordGuessGame.hiddenWordArray[i].replace(regex, "_");
         }
 
+        // Send hidden word character "_" placeholders to DOM
         wordGuessGame.hiddenWordText.innerText = wordGuessGame.hiddenWordArray;
-        console.log(wordGuessGame.wordSelection);
 
-        wordGuessGame.hiddenWordArray = wordGuessGame.hiddenWordText.innerText;
-
-        // Begin letter guessing logic
-        document.onkeyup = function(event){
-            if(wordGuessGame.guessesLeft == 0){
+        // Begin letter keypress & guessing logic
+        document.onkeyup = function(event) {
+            if (wordGuessGame.guessesLeft == 0) {
                 wordGuessGame.lost();
-            } else if (wordGuessGame.lettersGuessed.includes(event.key) === false){
+            }
+            
+            else if (wordGuessGame.lettersGuessed.includes(event.key) === false) {
                 wordGuessGame.lettersGuessed.push(event.key);
                 wordGuessGame.guessesLeft--;
                 wordGuessGame.guessesLeftText.innerText = wordGuessGame.guessesLeft;
+
+                if (wordGuessGame.wordSelection.includes(event.key)) {
+                    wordGuessGame.hiddenWordArray[wordGuessGame.wordSelection.indexOf(event.key)] = event.key;
+                    wordGuessGame.hiddenWordText.innerText = wordGuessGame.hiddenWordArray;
+                }
             }
             wordGuessGame.lettersGuessedText.innerText = wordGuessGame.lettersGuessed;
         }
