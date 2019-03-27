@@ -45,38 +45,42 @@ Vars/Stats:
     Letters already guessed (empty array)
     Possible words (array)
 */
+
+
 var wordBank = ["sasquatch", "nessie", "chupacabra", "bigfoot", "loch ness", "unicorn",
 "aliens", "bat boy", "poltergeist", "the jersey devil", "yeti", "kraken", "lizard man",
 "mothman", "slenderman", "quetzalcoatl"];
 
+// Global variables hooking into DOM elements
+splashScreen =          document.getElementById("splash-screen");
+gameScreen =            document.getElementById("game-screen");
+winScreen =             document.getElementById("win-screen");
+lostScreen =            document.getElementById("lost-screen");
+winsText =              document.getElementById("wins");
+guessesLeftText =       document.getElementById("guesses-left");
+lettersGuessedText =    document.getElementById("letters-guessed");
+hiddenWordText =        document.getElementById("hidden-word");
+
 // Game object
 var wordGuessGame = {
-    
-    // Global variables hooking into DOM elements
-    splashScreen:       document.getElementById("splash-screen"),
-    gameScreen:         document.getElementById("game-screen"),
-    winScreen:          document.getElementById("win-screen"),
-    lostScreen:         document.getElementById("lost-screen"),
-    winsText:           document.getElementById("wins"),
-    guessesLeftText:    document.getElementById("guesses-left"),
-    lettersGuessedText: document.getElementById("letters-guessed"),
-    hiddenWordText:     document.getElementById("hidden-word"),
 
-    // Init method to begin game logic
+    // INIT - Game Entry Point
     init: function() {
-        // Initialize splash screen, spacebar to begin game...
-        wordGuessGame.splashScreen.style.display = "block";
+
+        // Show div/splash screen
+        splashScreen.style.display = "block";
         document.onkeyup = function(event){
 
+            //Press spacebar to begin game cycle
             if(event.keyCode === 32){
-                wordGuessGame.splashScreen.style.display = "none";
-                wordGuessGame.gameScreen.style.display = "block";
+                splashScreen.style.display = "none";
+                gameScreen.style.display = "block";
                 wordGuessGame.start();
             }
         }
     },
 
-    // Start method to begin game cycle
+    // START - Game Logic
     start: function() {
         console.log("Beginning game sequence...");
         
@@ -85,20 +89,24 @@ var wordGuessGame = {
         this.guessesLeft = 12;
         this.lettersGuessed = [];
         this.wordSelection = wordBank[Math.floor((Math.random() * wordBank.length))];
+        this.hiddenLetters = [];
         this.hiddenWordArray = wordGuessGame.wordSelection.split("");
         
-        console.log("Hidden word selection is: " + wordGuessGame.wordSelection);
-        
-        // Regular expression for letter selection to replace with underscores
-        var regex = /[a-z]/;
+        console.log("Psst! The secret word is: " + wordGuessGame.wordSelection);
 
-        // FOR loop to iterate to replace hidden letters with underscores
-        for(var i=0; i < wordGuessGame.hiddenWordArray.length; i++) {
-            wordGuessGame.hiddenWordArray[i] = wordGuessGame.hiddenWordArray[i].replace(regex, "_");
-        }
+        // No longer needed
+        // Regular expression for letter selection to replace with underscores
+        // var regex = /[a-z]/;
+
+        // DEPRECATED** FOR loop to iterate to replace hidden letters with underscores
+        // for(var i=0; i < hiddenWordArray.length; i++) {
+        //     wordGuessGame.hiddenWordArray[i] = wordGuessGame.hiddenWordArray[i].replace(regex, "_");
+        // }
+        wordGuessGame.hiddenLetters = wordGuessGame.wordSelection.replace(/[a-z]/g, "_");
+        console.log(wordGuessGame.hiddenLetters);
 
         // Send hidden word character "_" placeholders to DOM
-        wordGuessGame.hiddenWordText.innerText = wordGuessGame.hiddenWordArray;
+        hiddenWordText.textContent = wordGuessGame.hiddenLetters;
 
         // Begin letter keypress & guessing logic
         document.onkeyup = function(event) {
@@ -109,21 +117,36 @@ var wordGuessGame = {
             else if (wordGuessGame.lettersGuessed.includes(event.key) === false) {
                 wordGuessGame.lettersGuessed.push(event.key);
                 wordGuessGame.guessesLeft--;
-                wordGuessGame.guessesLeftText.innerText = wordGuessGame.guessesLeft;
+                wordGuessGame.guessesLeftText.textContent = wordGuessGame.guessesLeft;
 
                 if (wordGuessGame.wordSelection.includes(event.key)) {
-                    wordGuessGame.hiddenWordArray[wordGuessGame.wordSelection.indexOf(event.key)] = event.key;
-                    wordGuessGame.hiddenWordText.innerText = wordGuessGame.hiddenWordArray;
+
+                    for (var i = 0; i < wordSelection.length; i++){
+                        if (wordGuessGame.wordSelection.charAt(i) === event.key){
+                            wordGuessGame.hiddenWordArray[i] = event.key;
+                            // wordGuessGame.hiddenWordArray[wordGuessGame.wordSelection.indexOf(event.key)] = event.key;
+                            wordGuessGame.hiddenWordText.textContent = wordGuessGame.hiddenWordArray;
+                        }
+                    }
+                    
                 }
             }
-            wordGuessGame.lettersGuessedText.innerText = wordGuessGame.lettersGuessed;
+            wordGuessGame.lettersGuessedText.textContent = wordGuessGame.lettersGuessed;
         }
     },
 
-    win: function() {},
+    // WINNER! - Executes when all letters guessed before guesses left gets to 0
+    win: function() {
+        wordGuessGame.gameScreen.display = "none";
+        wordGuessGame.winScreen.display = "block";
+        // Additional logic goes here...
+    },
+
+    // YOULOSE! - Executes if guessesLeft gets to 0 and array still contains "_" chars
     lost: function() {
         wordGuessGame.gameScreen.display = "none";
-        wordGuessGame.lostScreen.display = "static";
+        wordGuessGame.lostScreen.display = "block";
+        // Additional logic goes here...
     }
 }
 
