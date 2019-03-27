@@ -80,6 +80,13 @@ var wordGuessGame = {
         }
     },
 
+    // Function created to replace single character in a string as strings are immutable in JS
+    replaceChar: function (inputStr, inputChar, charPos) {
+        var splitArr = inputStr.split("");
+        splitArr[charPos] = inputChar;
+        return splitArr.join().replace(/,/g, "");
+    },
+
     // START - Game Logic
     start: function() {
         console.log("Beginning game sequence...");
@@ -93,42 +100,49 @@ var wordGuessGame = {
         this.hiddenWordArray = wordGuessGame.wordSelection.split("");
         
         console.log("Psst! The secret word is: " + wordGuessGame.wordSelection);
-
-        // No longer needed
-        // Regular expression for letter selection to replace with underscores
-        // var regex = /[a-z]/;
-
-        // DEPRECATED** FOR loop to iterate to replace hidden letters with underscores
-        // for(var i=0; i < hiddenWordArray.length; i++) {
-        //     wordGuessGame.hiddenWordArray[i] = wordGuessGame.hiddenWordArray[i].replace(regex, "_");
-        // }
+        
         wordGuessGame.hiddenLetters = wordGuessGame.wordSelection.replace(/[a-z]/g, "_");
-        console.log(wordGuessGame.hiddenLetters);
-
-        // Send hidden word character "_" placeholders to DOM
+        
+        // Send hiddenLetters to DOM, hiddenLetters is currently a string at this point
         hiddenWordText.textContent = wordGuessGame.hiddenLetters;
 
-        // Begin letter keypress & guessing logic
+        // Capture user keypress event
         document.onkeyup = function(event) {
-            if (wordGuessGame.guessesLeft == 0) {
+
+            // User loses game if out of guesses
+            if (wordGuessGame.guessesLeft === 0) {
+                console.log("You just lost");
                 wordGuessGame.lost();
             }
             
-            else if (wordGuessGame.lettersGuessed.includes(event.key) === false) {
+            // If letter pressed was not previously guessed...
+            if (wordGuessGame.lettersGuessed.includes(event.key) === false) {
+                
+                // Add letter to list of lettersGuessed
                 wordGuessGame.lettersGuessed.push(event.key);
-                wordGuessGame.guessesLeft--;
-                wordGuessGame.guessesLeftText.textContent = wordGuessGame.guessesLeft;
 
+                // Decrement guessesLeft
+                wordGuessGame.guessesLeft--;
+
+                // Push update of guessesLeft to the DOM
+                guessesLeftText.textContent = wordGuessGame.guessesLeft;
+
+                // Next, if the letter pressed occurs in the current word selection...
                 if (wordGuessGame.wordSelection.includes(event.key)) {
 
-                    for (var i = 0; i < wordSelection.length; i++){
+                    // Iterate over the current word selected, and replace the corresponding
+                    // character position in the hiddenLetters string...
+                
+                    for (var i = 0; i < wordGuessGame.wordSelection.length; i++){
+                        console.log("For loop #" + i);
                         if (wordGuessGame.wordSelection.charAt(i) === event.key){
-                            wordGuessGame.hiddenWordArray[i] = event.key;
-                            // wordGuessGame.hiddenWordArray[wordGuessGame.wordSelection.indexOf(event.key)] = event.key;
-                            wordGuessGame.hiddenWordText.textContent = wordGuessGame.hiddenWordArray;
-                        }
-                    }
-                    
+                            console.log("Letter match: " + wordGuessGame.wordSelection.charAt(i));
+                            wordGuessGame.hiddenLetters = wordGuessGame.replaceChar(wordGuessGame.hiddenLetters, event.key, i);
+                        } 
+                    } 
+                    // Lastly, push the updated hiddenLetters to the DOM
+                    hiddenWordText.textContent = wordGuessGame.hiddenLetters;
+        
                 }
             }
             wordGuessGame.lettersGuessedText.textContent = wordGuessGame.lettersGuessed;
