@@ -57,6 +57,7 @@ gameScreen =            document.getElementById("game-screen");
 winScreen =             document.getElementById("win-screen");
 lostScreen =            document.getElementById("lost-screen");
 winsText =              document.getElementById("wins");
+lossesText =            document.getElementById("losses");
 guessesLeftText =       document.getElementById("guesses-left");
 lettersGuessedText =    document.getElementById("letters-guessed");
 hiddenWordText =        document.getElementById("hidden-word");
@@ -91,6 +92,9 @@ var wordGuessGame = {
     start: function() {
         console.log("Beginning game sequence...");
         
+        // Show game screen
+        gameScreen.style.display = "block";
+
         // Game variable setup
         this.wins = 0;
         this.guessesLeft = 12;
@@ -132,7 +136,6 @@ var wordGuessGame = {
 
                     // Iterate over the current word selected, and replace the corresponding
                     // character position in the hiddenLetters string...
-                
                     for (var i = 0; i < wordGuessGame.wordSelection.length; i++){
                         console.log("For loop #" + i);
                         if (wordGuessGame.wordSelection.charAt(i) === event.key){
@@ -140,11 +143,19 @@ var wordGuessGame = {
                             wordGuessGame.hiddenLetters = wordGuessGame.replaceChar(wordGuessGame.hiddenLetters, event.key, i);
                         } 
                     } 
-                    // Lastly, push the updated hiddenLetters to the DOM
+
+                    // Then, push the updated hiddenLetters to the DOM
                     hiddenWordText.textContent = wordGuessGame.hiddenLetters;
+                    
+                    // Lastly, check if all letters have been guessed (winner!)
+                    if (wordGuessGame.hiddenLetters.includes("_") === false) {
+                        console.log("Callback to win function...")
+                        wordGuessGame.win();
+                    }
         
                 }
             }
+            // Update lettersGuessed already to the DOM
             wordGuessGame.lettersGuessedText.textContent = wordGuessGame.lettersGuessed;
         }
     },
@@ -153,14 +164,32 @@ var wordGuessGame = {
     win: function() {
         wordGuessGame.gameScreen.display = "none";
         wordGuessGame.winScreen.display = "block";
-        // Additional logic goes here...
+        // Play win sound here...
+        wordGuessGame.continue();
     },
 
     // YOULOSE! - Executes if guessesLeft gets to 0 and array still contains "_" chars
     lost: function() {
         wordGuessGame.gameScreen.display = "none";
         wordGuessGame.lostScreen.display = "block";
+        // Play lost sound here...
+        wordGuessGame.continue();
         // Additional logic goes here...
+    },
+
+    // CONTINUE? - Press spacebar to begin a new game cycle
+    continue: function() {
+        document.onkeyup = function(event){
+
+            // Event listener for spacebar
+            if(event.keyCode === 32){
+                splashScreen.style.display = "none";
+                winScreen.style.display = "none";
+                lostScreen.style.display = "none"
+                // Play continue sound here...
+                wordGuessGame.start();
+            }
+        }
     }
 }
 
