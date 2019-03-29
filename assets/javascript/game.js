@@ -24,34 +24,11 @@
 
 */
 
-/*
---== Pseudocode ==--
-1. Display "Press any key to get started" -- div - display: none?
-2. On keypress, remove start screen and reveal game screen
-3. Get user keypress event
-4. Store keypress in variable
-
-wordGuessGame
-    .start
-        Reset stats, Display start screen, pick random word from array
-    .win
-        Increment win stat, display win screen
-    .lost
-        Decrement win stat (if > 0), display lost screen
-
-Vars/Stats:
-    Wins (int)
-    Number of guesses remaining (int @ 12) 
-    Letters already guessed (empty array)
-    Possible words (array)
-*/
-
-
 var wordBank = ["sasquatch", "nessie", "chupacabra", "bigfoot", "loch ness", "unicorn",
 "aliens", "bat boy", "poltergeist", "the jersey devil", "yeti", "kraken", "lizard man",
 "mothman", "slenderman", "quetzalcoatl"];
 
-// Global variables hooking into DOM elements
+// Global variables for hooking into DOM elements
 splashScreen =          document.getElementById("splash-screen");
 gameScreen =            document.getElementById("game-screen");
 winScreen =             document.getElementById("win-screen");
@@ -62,26 +39,18 @@ guessesLeftText =       document.getElementById("guesses-left");
 lettersGuessedText =    document.getElementById("letters-guessed");
 hiddenWordText =        document.getElementById("hidden-word");
 
-// Game object
+// GAME OBJECT
 var wordGuessGame = {
 
-    // INIT - Game Entry Point
+    // INIT - Game Entry Point --- This is the first function to fire when the page loads
     init: function() {
 
         // Show div/splash screen
         splashScreen.style.display = "block";
-        document.onkeyup = function(event){
-
-            //Press spacebar to begin game cycle
-            if(event.keyCode === 32){
-                splashScreen.style.display = "none";
-                gameScreen.style.display = "block";
-                wordGuessGame.start();
-            }
-        }
+        wordGuessGame.continue();
     },
 
-    // Function created to replace single character in a string as strings are immutable in JS
+    // Created helper function to replace single character in a string as strings are immutable in JS
     replaceChar: function (inputStr, inputChar, charPos) {
         var splitArr = inputStr.split("");
         splitArr[charPos] = inputChar;
@@ -90,21 +59,29 @@ var wordGuessGame = {
 
     // START - Game Logic
     start: function() {
-        console.log("Beginning game sequence...");
         
         // Show game screen
         gameScreen.style.display = "block";
 
-        // Game variable setup
+        // Game object property setup
         this.wins = 0;
+        this.losses = 0;
         this.guessesLeft = 12;
         this.lettersGuessed = [];
         this.wordSelection = wordBank[Math.floor((Math.random() * wordBank.length))];
         this.hiddenLetters = [];
         this.hiddenWordArray = wordGuessGame.wordSelection.split("");
         
+        // Push re-initialized game stats to the DOM
+        winsText.textContent =              wordGuessGame.wins;
+        lossesText.textContent =            wordGuessGame.losses;
+        guessesLeftText.textContent =       wordGuessGame.guessesLeft;
+        lettersGuessedText.textContent =    wordGuessGame.lettersGuessed;
+
+        // Push the wordSelection to console for testing purposes
         console.log("Psst! The secret word is: " + wordGuessGame.wordSelection);
         
+        // hiddenLetters property now represented as wordSelection with letters replaced by underscores. Used regex...
         wordGuessGame.hiddenLetters = wordGuessGame.wordSelection.replace(/[a-z]/g, "_");
         
         // Send hiddenLetters to DOM, hiddenLetters is currently a string at this point
@@ -115,7 +92,6 @@ var wordGuessGame = {
 
             // User loses game if out of guesses
             if (wordGuessGame.guessesLeft === 0) {
-                console.log("You just lost");
                 wordGuessGame.lost();
             }
             
@@ -137,9 +113,8 @@ var wordGuessGame = {
                     // Iterate over the current word selected, and replace the corresponding
                     // character position in the hiddenLetters string...
                     for (var i = 0; i < wordGuessGame.wordSelection.length; i++){
-                        console.log("For loop #" + i);
+                        // Nested condition to replace "_" character with the user's keypress if occuring in the wordSelection
                         if (wordGuessGame.wordSelection.charAt(i) === event.key){
-                            console.log("Letter match: " + wordGuessGame.wordSelection.charAt(i));
                             wordGuessGame.hiddenLetters = wordGuessGame.replaceChar(wordGuessGame.hiddenLetters, event.key, i);
                         } 
                     } 
@@ -149,7 +124,6 @@ var wordGuessGame = {
                     
                     // Lastly, check if all letters have been guessed (winner!)
                     if (wordGuessGame.hiddenLetters.includes("_") === false) {
-                        console.log("Callback to win function...")
                         wordGuessGame.win();
                     }
         
@@ -162,19 +136,21 @@ var wordGuessGame = {
 
     // WINNER! - Executes when all letters guessed before guesses left gets to 0
     win: function() {
-        wordGuessGame.gameScreen.display = "none";
-        wordGuessGame.winScreen.display = "block";
+        wordGuessGame.wins += 1;
+        gameScreen.style.display = "none";
+        winScreen.style.display = "block";
         // Play win sound here...
         wordGuessGame.continue();
     },
 
     // YOULOSE! - Executes if guessesLeft gets to 0 and array still contains "_" chars
     lost: function() {
-        wordGuessGame.gameScreen.display = "none";
-        wordGuessGame.lostScreen.display = "block";
+        wordGuessGame.losses += 1;
+        gameScreen.style.display = "none";
+        lostScreen.style.display = "block";
         // Play lost sound here...
         wordGuessGame.continue();
-        // Additional logic goes here...
+        
     },
 
     // CONTINUE? - Press spacebar to begin a new game cycle
