@@ -31,6 +31,7 @@ body {
 }
 
 #game-screen {
+    padding: 2em;
     overflow: hidden;
     display: none;
 }
@@ -46,7 +47,7 @@ body {
 }
 
 .transparent {
-    opacity: 0.5;
+    opacity: 0.75;
 }
 
 .card {

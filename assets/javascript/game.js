@@ -1,10 +1,9 @@
 var wordBank = ["sasquatch", "nessie", "chupacabra", "bigfoot", "vampire", "unicorn",
 "aliens", "bat boy", "poltergeist", "the jersey devil", "yeti", "kraken", "lizard man",
-"mothman", "slenderman", "quetzalcoatl"];
+"mothman", "slenderman", "quetzalcoatl", "illuminati", "area 51", "ghost", "greys"];
 
 // Experiment creating a wordBank object holding key/value pairs (wordSelection:hint)
 // Not enough time to refactor to implement into game... maybe next time lol
-
 // var wordBank2 = {
 //     sasquatch: "Lotsa hair..." ,
 //     nessie: "Big lake...",
@@ -23,6 +22,13 @@ lettersGuessedText =    document.getElementById("letters-guessed");
 hiddenWordText =        document.getElementById("hidden-word");
 revealTextLost =        document.getElementById("reveal-text-lost");
 revealTextWin =         document.getElementById("reveal-text-win");
+
+//Global variables for sound effects
+var gameOverSound = new Audio("assets/sounds/242503__gabrielaraujo__failure-wrong-action.mp3");
+var gameWinSound = new Audio("assets/sounds/448274__henryrichard__sfx-success.mp3");
+var gameBgSound = new Audio("assets/sounds/130591__keplar__tangible-darkness.mp3");
+var guessGood = new Audio("assets/sounds/383593__newagesoup__bicycle-bell-04.mp3");
+
 
 // GAME OBJECT
 var wordGuessGame = {
@@ -51,6 +57,10 @@ var wordGuessGame = {
         
         // Show game screen
         gameScreen.style.display = "block";
+
+        // Start background music
+        gameBgSound.loop = true;
+        gameBgSound.play();
 
         // Game object property setup/reset
         this.guessesLeft = 12;
@@ -108,6 +118,9 @@ var wordGuessGame = {
 
                     // Then, push the updated hiddenLetters to the DOM
                     hiddenWordText.textContent = wordGuessGame.hiddenLetters;
+
+                    // Play success sound!
+                    guessGood.play();
                     
                     // Lastly, check if all letters have been guessed (winner!)
                     if (wordGuessGame.hiddenLetters.includes("_") === false) {
@@ -127,7 +140,8 @@ var wordGuessGame = {
         gameScreen.style.display = "none";
         winScreen.style.display = "block";
         revealTextWin.textContent = wordGuessGame.wordSelection;
-        // Play win sound here...
+        gameBgSound.pause();
+        gameWinSound.play();
         wordGuessGame.continue();
     },
 
@@ -137,7 +151,8 @@ var wordGuessGame = {
         gameScreen.style.display = "none";
         lostScreen.style.display = "block";
         revealTextLost.textContent = wordGuessGame.wordSelection;
-        // Play lost sound here...
+        gameBgSound.pause();
+        guessBad.play();
         wordGuessGame.continue();
         
     },
