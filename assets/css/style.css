@@ -1,8 +1,8 @@
 body {
     margin: 0;
-    overflow: hidden;
-    color: black;
-    background-color: white;
+    min-height: 100%;
+    /* overflow: hidden; */
+    background-image: url("/assets/images/textured_paper.png");
 }
 
 .spaced-chars {
@@ -21,11 +21,11 @@ body {
 }
 
 .trans-box {
-    width: 50%;
-    height: 50%;
-    background:rgba(0, 0, 0, 0.5);
+    margin-top: 25%;
+    padding: 2em;
+    background: rgba(0, 0, 0, 0.5);
     border: 1px solid white;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 #splash-screen {
@@ -35,16 +35,16 @@ body {
 }
 
 #game-screen {
-    display: none;
+    overflow: hidden;
+    display: block;
 }
 
 #lost-screen {
     display: none;
-    margin: 3em auto;
-    background-color: white;
+    margin: 4em auto;
 }
 
 #win-screen {
     display: none;
-    margin: 3em auto;
+    margin: 4em auto;
 }

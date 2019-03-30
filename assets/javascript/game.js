@@ -1,32 +1,15 @@
-/*
-1. [Watch the demo](https://youtu.be/W-IJcC4tYFI).
-2. Choose a theme for your game! In the demo, we picked an 80s theme: 80s questions, 80s sound and an 80s aesthetic. You can choose any subject for your theme, though, so be creative!
-3. Use key events to listen for the letters that your players will type.
-4. Display the following on the page:
-5. Press any key to get started!
-6. Wins: (# of times user guessed the word correctly).
-   * If the word is `madonna`, display it like this when the game starts: `_ _ _ _ _ _ _`.
-   * As the user guesses the correct letters, reveal them: `m a d o _  _ a`.
-7. Number of Guesses Remaining: (# of guesses remaining for the user).
-8. Letters Already Guessed: (Letters the user has guessed, displayed like `L Z Y H`).
-9. After the user wins/loses the game should automatically choose another word and make the user play it.
-
-##### Word Guess Game Bonuses
-
-1. Play a sound or song when the user guesses their word correctly, like in our demo.
-2. Write some stylish CSS rules to make a design that fits your game's theme.
-3. **HARD MODE:** Organize your game code as an object, except for the key events to get the letter guessed. This will be a challenge if you haven't coded with JavaScript before, but we encourage anyone already familiar with the language to try this out.
-4. Save your whole game and its properties in an object.
-5. Save any of your game's functions as methods, and call them underneath your object declaration using event listeners.
-6. Don't forget to place your global variables and functions above your object.
-   * Remember: global variables, then objects, then calls.
-7. Definitely talk with a TA or your instructor if you get tripped up during this challenge.
-
-*/
-
-var wordBank = ["sasquatch", "nessie", "chupacabra", "bigfoot", "loch ness", "unicorn",
+var wordBank = ["sasquatch", "nessie", "chupacabra", "bigfoot", "vampire", "unicorn",
 "aliens", "bat boy", "poltergeist", "the jersey devil", "yeti", "kraken", "lizard man",
 "mothman", "slenderman", "quetzalcoatl"];
+
+// Experiment creating a wordBank object holding key/value pairs (wordSelection:hint)
+// Not enough time to refactor to implement into game... maybe next time lol
+
+// var wordBank2 = {
+//     sasquatch: "Lotsa hair..." ,
+//     nessie: "Big lake...",
+//     vampire: "Now accepting blood donors..."
+// };
 
 // Global variables for hooking into DOM elements
 splashScreen =          document.getElementById("splash-screen");
@@ -38,12 +21,18 @@ lossesText =            document.getElementById("losses");
 guessesLeftText =       document.getElementById("guesses-left");
 lettersGuessedText =    document.getElementById("letters-guessed");
 hiddenWordText =        document.getElementById("hidden-word");
+revealTextLost =        document.getElementById("reveal-text-lost");
+revealTextWin =         document.getElementById("reveal-text-win");
 
 // GAME OBJECT
 var wordGuessGame = {
 
     // INIT - Game Entry Point --- This is the first function to fire when the page loads
     init: function() {
+
+        // Vars to start tracking wins and losses
+        this.wins = 0;
+        this.losses = 0;
 
         // Show div/splash screen
         splashScreen.style.display = "block";
@@ -63,9 +52,7 @@ var wordGuessGame = {
         // Show game screen
         gameScreen.style.display = "block";
 
-        // Game object property setup
-        this.wins = 0;
-        this.losses = 0;
+        // Game object property setup/reset
         this.guessesLeft = 12;
         this.lettersGuessed = [];
         this.wordSelection = wordBank[Math.floor((Math.random() * wordBank.length))];
@@ -130,7 +117,7 @@ var wordGuessGame = {
                 }
             }
             // Update lettersGuessed already to the DOM
-            wordGuessGame.lettersGuessedText.textContent = wordGuessGame.lettersGuessed;
+            lettersGuessedText.textContent = wordGuessGame.lettersGuessed;
         }
     },
 
@@ -139,6 +126,7 @@ var wordGuessGame = {
         wordGuessGame.wins += 1;
         gameScreen.style.display = "none";
         winScreen.style.display = "block";
+        revealTextWin.textContent = wordGuessGame.wordSelection;
         // Play win sound here...
         wordGuessGame.continue();
     },
@@ -148,6 +136,7 @@ var wordGuessGame = {
         wordGuessGame.losses += 1;
         gameScreen.style.display = "none";
         lostScreen.style.display = "block";
+        revealTextLost.textContent = wordGuessGame.wordSelection;
         // Play lost sound here...
         wordGuessGame.continue();
         
@@ -161,7 +150,7 @@ var wordGuessGame = {
             if(event.keyCode === 32){
                 splashScreen.style.display = "none";
                 winScreen.style.display = "none";
-                lostScreen.style.display = "none"
+                lostScreen.style.display = "none";
                 // Play continue sound here...
                 wordGuessGame.start();
             }
