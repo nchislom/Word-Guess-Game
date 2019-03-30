@@ -17,6 +17,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Homemade+Apple|Modern+Antiqua" rel="stylesheet"> 
 
     <title>Oddities, Conspiracies, and Cryptids Oh My!!</title>
 </head>
@@ -27,45 +28,47 @@
 
             <div class="mx-auto">
 
-                <!-- <div id="splash-screen" class="noop">
-                    <p class="transbox vert-center">Press SPACEBAR to begin...</p>
-                </div> -->
-
-                <div id="splash-screen" class="jumbotron jumbotron-fluid">
-                    <div class="container">
-                        <h1 class="display-5">
-                            Oddities, Conspiracies, and Cryptids Oh My!<br>
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="display-5 centered">
+                            <span class="homeadeApple">Oddities, Conspiracies,<br>and Cryptids Oh My!</span><br>
                             <i class="fas fa-moon"></i>
                             <i class="fas fa-cat"></i>
                             <i class="fas fa-pastafarianism"></i>
                             <i class="fas fa-ghost"></i>
                         </h1>
-                        <p class="lead">A creepy twist on a classic word guess game...</p>
-                        <hr class="my-4">
-                        <p>Press SPACEBAR to begin.<br><br>Directions: Use letters on the keyboard to reveal the letters in the hidden word.<br>Guess the word before you run out of guesses...</p>
-                        <!-- <a class="btn btn-primary btn-lg" href="#" role="button">Start</a> -->
                     </div>
-                </div>
-        
-                <div id="game-screen" class="trans-box">
-                    <p>Wins: <span id="wins"></span></p>
-                    <p>Losses: <span id="losses"></span></p>
-                    <p>Guesses Left: <span id="guesses-left"></span></p>
-                    <p>Letters Guessed: <span id="letters-guessed"></span></p>
-                    <p>Hidden Word: <span id="hidden-word" class="spaced-chars"></span></p>
-                </div>
-        
-                <div id="lost-screen" class="alert alert-danger" role="alert">
-                    <p>Game Over!</p>
-                    <p>The word was: <span id="reveal-text-lost"></span>!</p>
-                    <p>Press Spacebar to play again...</p>
-                </div>
-        
-                <div id="win-screen" class="alert alert-success" role="alert">
-                    <p>You Win!</p>
-                    <p>The word was: <span id="reveal-text-win"></span>!</p>
-                    <p>Press spacebar to play again...</p>
-                </div>
+                    <div class="card-body">
+                        <div id="splash-screen" class="jumbotron jumbotron-fluid">
+                            <div class="container">
+                                <p class="lead">A creepy twist on a classic word guess game...</p>
+                                <hr class="my-4">
+                                <p>Press SPACEBAR to begin.<br><br>Directions: Use letters on the keyboard to reveal the letters of the hidden word.<br>Guess the word before you run out of guesses...</p>
+                            </div>
+                        </div>
+
+                        <div id="game-screen" class="jumbotron jumbotron-fluid">
+                            <p>Wins: <span id="wins"></span></p>
+                            <p>Losses: <span id="losses"></span></p>
+                            <p>Guesses Left: <span id="guesses-left"></span></p>
+                            <p>Letters Guessed: <span id="letters-guessed"></span></p>
+                            <p>Hidden Word: <span id="hidden-word" class="spaced-chars"></span></p>
+                        </div>
+                
+                        <div id="lost-screen" class="alert alert-danger" role="alert">
+                            <p>Game Over!</p>
+                            <p>The word was: <span id="reveal-text-lost"></span>!</p>
+                            <p>Press Spacebar to play again...</p>
+                        </div>
+                
+                        <div id="win-screen" class="alert alert-success" role="alert">
+                            <p>You Win!</p>
+                            <p>The word was: <span id="reveal-text-win"></span>!</p>
+                            <p>Press spacebar to play again...</p>
+                        </div>
+
+                    </div>
+                  </div>
 
             </div>
 

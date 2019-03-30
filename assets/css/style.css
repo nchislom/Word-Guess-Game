@@ -2,7 +2,9 @@ body {
     margin: 0;
     min-height: 100%;
     /* overflow: hidden; */
-    background-image: url("/assets/images/textured_paper.png");
+    /* background-image: url("../images/textured_paper.png"); */
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Gloomy_Forest.jpg/1280px-Gloomy_Forest.jpg");
+    background-size: 100%;
 }
 
 .spaced-chars {
@@ -10,22 +12,16 @@ body {
     word-spacing: 1em;
 }
 
-.rel-pos {
-    position: relative;
+.centered {
+    text-align: center;
 }
 
-.vert-center {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+.homeadeApple {
+    font-family: 'Homemade Apple', cursive;
 }
 
-.trans-box {
-    margin-top: 25%;
-    padding: 2em;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid white;
-    border-radius: 5px;
+.fas {
+    margin-top: 20px;
 }
 
 #splash-screen {
@@ -36,7 +32,7 @@ body {
 
 #game-screen {
     overflow: hidden;
-    display: block;
+    display: none;
 }
 
 #lost-screen {
@@ -47,4 +43,16 @@ body {
 #win-screen {
     display: none;
     margin: 4em auto;
+}
+
+.transparent {
+    opacity: 0.5;
+}
+
+.card {
+    background-color: transparent;
+}
+
+.card-header {
+    color: white;
 }
