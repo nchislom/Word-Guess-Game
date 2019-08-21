@@ -152,7 +152,7 @@ var wordGuessGame = {
         lostScreen.style.display = "block";
         revealTextLost.textContent = wordGuessGame.wordSelection;
         gameBgSound.pause();
-        guessBad.play();
+        // guessBad.play();
         wordGuessGame.continue();
         
     },
@@ -162,7 +162,7 @@ var wordGuessGame = {
         document.onkeyup = function(event){
 
             // Event listener for keypress
-            if(event.keyCode){
+            if(event.keyCode === 32){
                 splashScreen.style.display = "none";
                 winScreen.style.display = "none";
                 lostScreen.style.display = "none";
