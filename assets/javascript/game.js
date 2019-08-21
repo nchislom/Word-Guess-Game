@@ -161,8 +161,8 @@ var wordGuessGame = {
     continue: function() {
         document.onkeyup = function(event){
 
-            // Event listener for spacebar
-            if(event.keyCode === 32){
+            // Event listener for keypress
+            if(event.keyCode){
                 splashScreen.style.display = "none";
                 winScreen.style.display = "none";
                 lostScreen.style.display = "none";
